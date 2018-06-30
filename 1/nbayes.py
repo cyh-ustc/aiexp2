@@ -5,8 +5,8 @@ import random
 
 def nBayesClassifier(traindata, trainlabel, testdata, testlabel, threshold):
 	# train
-	wordspam = [0 for i in range(32000)]
-	wordham = [0 for i in range(32000)]
+	wordspam = [0 for i in range(M)]
+	wordham = [0 for i in range(M)]
 	for i in range(len(traindata)):
 		if trainlabel[i]:
 			for j in traindata[i]:
@@ -32,18 +32,18 @@ def nBayesClassifier(traindata, trainlabel, testdata, testlabel, threshold):
 			if wordspam[j] and wordham[j]:
 				p1 *= probspam[j]
 				p2 *= probham[j]
-		print(p1, p2)
 		for j in testdata[i][1]:
 			if wordspam[j] and wordham[j]:
 				p1 *= (1 - probspam[j])
 				p2 *= (1 - probham[j])
 		p1 /= 6
 		p2 *= (5/6)
-		print(p1, p2)
-		p = p1 / (p1 + p2)
+		if p1 + p2 == 0.0:
+			p = 0
+		else:
+			p = p1 / (p1 + p2)
 		
-		
-		print(p)
+
 		if p > threshold:
 			if testlabel[i]:
 				np2p += 1
@@ -83,6 +83,6 @@ for i in range(250):
 	testdata.append([tmpz, u - tmpz])
 	testlabel.append(0)
 
-print(nBayesClassifier(traindata, trainlabel, testdata, testlabel, 0.5))
+print(nBayesClassifier(traindata, trainlabel, testdata, testlabel, 0.75))
 
 
