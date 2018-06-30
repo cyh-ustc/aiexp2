@@ -1,0 +1,1 @@
+ halloechen i have requires saxon conflicts saxon in my spec file but apparently rpm ignores all version numbers so requires saxon conflicts saxon would install even with saxon and requires saxon conflicts saxon wouldn t install even with saxon what could be the reason for this tschoe torsten rpm list mailing list http lists freshrpms net mailman listinfo rpm list 

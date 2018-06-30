@@ -1,0 +1,1 @@
+ skip montanaro that has the nasty side effect of placing all py files in the package what about obvious executable scripts like timtest or hammie how can i keep them out of the package put them in a scripts folder m 

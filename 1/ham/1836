@@ -1,0 +1,1 @@
+ if and when we package this perhaps we should use barry s trick greg it s not a trick it just requires this greg package dir spambayes greg in the setup script that has the nasty side effect of placing all py files in the package what about obvious executable scripts like timtest or hammie how can i keep them out of the package skip 

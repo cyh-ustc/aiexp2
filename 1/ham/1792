@@ -1,0 +1,1 @@
+ i actually like neale s x spam disposition header i just wonder if maybe we should choose something with a different prefix than x spam so that people don t confuse it with spamassassin all of whose headers begin with that prefix also some sort of version information would be useful perhaps the cvs version number for the classifier module could be tacked on skip 
