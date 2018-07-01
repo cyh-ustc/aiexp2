@@ -67,10 +67,10 @@ for i in range(len(testdata)):
 
 
 # PCA
-u = PCA(traindata, testdata, 0.5)
+u = PCA(traindata, testdata, 0.9)
 
 # predict
-traindata = traindata.T * u
-testdata = traindata.T * u
+traindata = traindata * u.T
+testdata = testdata * u.T
 predict(traindata, testdata)
 		
