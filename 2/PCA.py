@@ -10,13 +10,22 @@ def loadpgm(path):
 	
 def PCA(traindata, testdata, threshold):
 	sigma = 0
-	z = 0
-	for i in traindata:
-		sigma += np.array([i]).T * np.array([i])
-		z += 1
-		print(z)
-	u, s, vh = np.linalg.svd(sigma)
-	return u
+	sigma = traindata.T * traindata
+	sigma = sigma / 320
+	
+	w, v = np.linalg.eig(sigma)
+	w = w.real
+	v = v.real
+	se = sum(w) * threshold
+	ze = 0
+	i = 0
+	while True:
+		ze += w[i]
+		i += 1
+		if ze >= se or i > len(w):
+			break
+	return v[:i]
+
 
 def predict(traindata, testdata):
 	bingo = 0
@@ -45,10 +54,9 @@ for i in range(40):#40 persons
 	for j in range(2):
 		testdata.append(loadpgm('faces/s%d/%d.pgm'%(i+1, x[j+8] + 1)))
 
-print(traindata.__str__().replace())
 
-traindata = np.array(traindata)
-testdata = np.array(testdata)
+traindata = np.mat(traindata)
+testdata = np.mat(testdata)
 
 # feature scaling
 mean_traindata = np.mean(traindata, 0)
@@ -59,12 +67,10 @@ for i in range(len(testdata)):
 
 
 # PCA
-#u = PCA(traindata, testdata, 1)
-#print(u)
-
-
-
+u = PCA(traindata, testdata, 0.5)
 
 # predict
-
+traindata = traindata.T * u
+testdata = traindata.T * u
+predict(traindata, testdata)
 		
