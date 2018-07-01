@@ -21,5 +21,5 @@ traindata = traindata - m;
 clear m;
 sigma = traindata' * traindata;
 sigma = sigma / 320;
-%[u, s, ~] = svd(sigma);
-%s = ones(1, length(s)) * s;
+[u, s, ~] = svd(sigma);
+s = ones(1, length(s)) * s;

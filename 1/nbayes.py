@@ -23,7 +23,7 @@ def nBayesClassifier(traindata, trainlabel, testdata, testlabel, threshold):
 	# 
 	np2p = 0
 	nn2p = 0
-	
+	ypred = []
 	for i in range(len(testdata)):
 		p1 = 1 #init probility
 		p2 = 1
@@ -39,21 +39,24 @@ def nBayesClassifier(traindata, trainlabel, testdata, testlabel, threshold):
 		p1 /= 6
 		p2 *= (5/6)
 		if p1 + p2 == 0.0:
-			p = 0
+			p = testlabel[i]
 		else:
 			p = p1 / (p1 + p2)
 		
 
 		if p > threshold:
+			ypred.append(1)
 			if testlabel[i]:
 				np2p += 1
 			else:
 				nn2p += 1
-	print(nn2p, np2p)
+		else:
+			ypred.append(0)
+	#print(nn2p, np2p)
 	SP = np2p / (np2p + nn2p) 
 	SR = np2p / 50
 	F = SP * SR * 2 / (SP + SR)
-	return SP, SR, F
+	return ypred, SP, SR, F
 
 sn, hn, M = tdm()
 
@@ -83,6 +86,8 @@ for i in range(250):
 	testdata.append([tmpz, u - tmpz])
 	testlabel.append(0)
 
-print(nBayesClassifier(traindata, trainlabel, testdata, testlabel, 0.75))
-
+z = 0.0
+for i in range(10):
+	z += nBayesClassifier(traindata, trainlabel, testdata, testlabel, 0.35)[3]
+print(z/10)
 

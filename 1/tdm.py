@@ -45,8 +45,14 @@ def tdm():
 		for j in i:
 			z[j][1] += 1
 	
-	upper = 0.9
-	lower = 0.03
+	
+	# nbayes
+	#upper = 0.4
+	#lower = 0.001
+	
+	# lsclassifier
+	upper = 0.4
+	lower = 0.05
 	
 	selectwords = dict()
 	idx = 0
@@ -71,5 +77,5 @@ def tdm():
 			if  j in selectwords:
 				hn[-1].append(tuple([selectwords[j], i[j]]))
 		
-
+	#print(len(selectwords))
 	return sn, hn, len(selectwords)
