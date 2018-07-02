@@ -17,7 +17,7 @@ def softsvm(traindata, trainlabel, testdata, testlabel, sigma, C):
 	ypred = []
 	np2p = 0
 	nn2p = 0
-	for i in range(300):
+	for i in range(600):
 		if result[i] == 1:
 			ypred.append(1)
 			if testlabel[i] == 1:
@@ -28,56 +28,60 @@ def softsvm(traindata, trainlabel, testdata, testlabel, sigma, C):
 			ypred.append(0)
 	#print(nn2p, np2p)
 	SP = np2p / (np2p + nn2p) 
-	SR = np2p / 50
+	SR = np2p / 100
 	F = SP * SR * 2 / (SP + SR)
 	print(ypred, SP, SR, F)
 	
 # load data
 sn, hn, M = tdm()
-
-traindata = []
-trainlabel = []
-testdata = []
-testlabel = []
-
-# select traindata & testdata
-
-# sparse matrix -> matrix
-
 x = list(range(500))
 random.shuffle(x)
-for i in range(450):
-	traindata.append([0 for j in range(M)])
-	for j in sn[x[i]]:
-		traindata[-1][j[0]] = j[1]
-for i in range(50):
-	testdata.append([0 for j in range(M)])
-	for j in sn[x[i + 450]]:
-		testdata[-1][j[0]] = j[1]
+y = list(range(2500))
+random.shuffle(y)
+for i in range(5):
+	traindata = []
+	trainlabel = []
+	testdata = []
+	testlabel = []
 
-x = list(range(2500))
-random.shuffle(x)
-for i in range(2250):
-	traindata.append([0 for j in range(M)])
-	for j in hn[x[i]]:
-		traindata[-1][j[0]] = j[1]
-for i in range(250):
-	testdata.append([0 for j in range(M)])
-	for j in hn[x[i + 2250]]:
-		testdata[-1][j[0]] = j[1]
+	# select traindata & testdata
 
-# create label matrix(array) 1(spam) or -1(ham)
-		
-trainlabel =[1 for i in range(450)] + [-1 for i in range(2250)]
-testlabel = [1 for i in range(50)] + [-1 for i in range(250)]
+	# sparse matrix -> matrix
 
-# use numpy array
 
-traindata = np.array(traindata)
-trainlabel = np.array(trainlabel)
-testdata = np.array(testdata)
-testlabel = np.array(testlabel)
+	for i in range(400):
+		traindata.append([0 for j in range(M)])
+		for j in sn[x[i]]:
+			traindata[-1][j[0]] = j[1]
+	for i in range(100):
+		testdata.append([0 for j in range(M)])
+		for j in sn[x[i + 400]]:
+			testdata[-1][j[0]] = j[1]
 
-# svm
 
-softsvm(traindata, trainlabel, testdata, testlabel, 0, 25)
+	for i in range(2000):
+		traindata.append([0 for j in range(M)])
+		for j in hn[y[i]]:
+			traindata[-1][j[0]] = j[1]
+	for i in range(500):
+		testdata.append([0 for j in range(M)])
+		for j in hn[y[i + 2000]]:
+			testdata[-1][j[0]] = j[1]
+
+	# create label matrix(array) 1(spam) or -1(ham)
+			
+	trainlabel =[1 for i in range(400)] + [-1 for i in range(2000)]
+	testlabel = [1 for i in range(100)] + [-1 for i in range(500)]
+
+	# use numpy array
+
+	traindata = np.array(traindata)
+	trainlabel = np.array(trainlabel)
+	testdata = np.array(testdata)
+	testlabel = np.array(testlabel)
+
+	# svm
+
+	softsvm(traindata, trainlabel, testdata, testlabel, 0, 25)
+	x =  x[100:] + x[:100]
+	y =  y[500:] + y[:500]

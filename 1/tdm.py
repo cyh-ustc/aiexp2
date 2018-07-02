@@ -47,8 +47,8 @@ def tdm():
 	
 	
 	# nbayes
-	#upper = 0.4
-	#lower = 0.001
+	# upper = 0.4
+	# lower = 0.001
 	
 	# lsclassifier
 	upper = 0.4

@@ -2,7 +2,7 @@ import numpy as np
 import random
 
 class SVM():
-    def __init__(self, kernel_type='linear', C=1.0, sigma = 1.0, epsilon=0.001, max_iter=50 ):
+    def __init__(self, kernel_type='linear', C=1.0, sigma = 1.0, epsilon=0.001, max_iter=5000 ):
         self.kernels = {
             'linear' : self.kernel_linear,
             'quadratic' : self.kernel_quadratic

@@ -6,6 +6,7 @@ import random
 def lsClassifier(traindata, trainlabel, testdata, testlabel, _lambda):
 	x = traindata
 	y = trainlabel
+
 	z = x.T * x
 
 	omega = (z + _lambda*np.eye(z.shape[0])).I * x.T * y.T
@@ -13,17 +14,17 @@ def lsClassifier(traindata, trainlabel, testdata, testlabel, _lambda):
 	
 	
 	p = [i[0] for i in predicty]
-	p1 = p[:50]
-	p2 = p[50:]
+	p1 = p[:100]
+	p2 = p[100:]
 	p1.sort()
-	mf = 50
+	mf = 100
 	mt = 0
 	for i in range(len(p1)):
 		m2 = 0
 		for j in p2:
 			if j > p1[i]:
 				m2 += 1
-		f = (50 + m2)/(50 - i + 1)
+		f = (100 + m2)/(100 - i + 1)
 		if f < mf:
 			mf = f
 			mt = p1[i]
@@ -42,44 +43,55 @@ def lsClassifier(traindata, trainlabel, testdata, testlabel, _lambda):
 			ypred.append(0)
 	#print(nn2p, np2p)
 	SP = np2p / (np2p + nn2p) 
-	SR = np2p / 50
+	SR = np2p / 100
 	F = SP * SR * 2 / (SP + SR)
 	return ypred, SP, SR, F
 	
 
 sn, hn, M = tdm()
 
-traindata = []
-trainlabel = []
-testdata = []
-testlabel = []
-
 x = list(range(500))
 random.shuffle(x)
-for i in range(450):
-	traindata.append([0 for j in range(M)])
-	for j in sn[x[i]]:
-		traindata[-1][j[0]] = j[1]
-for i in range(50):
-	testdata.append([0 for j in range(M)])
-	for j in sn[x[i + 450]]:
-		testdata[-1][j[0]] = j[1]
+y = list(range(2500))
+random.shuffle(y)
 
-x = list(range(2500))
-random.shuffle(x)
-for i in range(2250):
-	traindata.append([0 for j in range(M)])
-	for j in hn[x[i]]:
-		traindata[-1][j[0]] = j[1]
-for i in range(250):
-	testdata.append([0 for j in range(M)])
-	for j in hn[x[i + 2250]]:
-		testdata[-1][j[0]] = j[1]
+# 5 cross validation
+f = []
+for idx in range(5):
 
-traindata = np.mat(traindata)
-testdata = np.mat(testdata)
-trainlabel = np.mat([1 for i in range(450)] + [0 for i in range(2250)])
-testlabel = np.mat([1 for i in range(50)] + [0 for i in range(250)])
+	traindata = []
+	trainlabel = []
+	testdata = []
+	testlabel = []
+
+	for i in range(400):
+		traindata.append([0 for j in range(M)])
+		for j in sn[x[i]]:
+			traindata[-1][j[0]] = j[1]
+	for i in range(100):
+		testdata.append([0 for j in range(M)])
+		for j in sn[x[i + 400]]:
+			testdata[-1][j[0]] = j[1]
+
+	for i in range(2000):
+		traindata.append([0 for j in range(M)])
+		for j in hn[y[i]]:
+			traindata[-1][j[0]] = j[1]
+	for i in range(500):
+		testdata.append([0 for j in range(M)])
+		for j in hn[y[i + 2000]]:
+			testdata[-1][j[0]] = j[1]
+
+	traindata = np.mat(traindata)
+	testdata = np.mat(testdata)
+	trainlabel = np.mat([1 for i in range(400)] + [0 for i in range(2000)])
+	testlabel = np.mat([1 for i in range(100)] + [0 for i in range(500)])
 
 
-print(lsClassifier(traindata, trainlabel, testdata, testlabel, 1))
+	f.append(lsClassifier(traindata, trainlabel, testdata, testlabel,1000)[3])
+	x =  x[100:] + x[:100]
+	y =  y[500:] + y[:500]
+print(f)
+print(sum(f)/len(f))
+
+

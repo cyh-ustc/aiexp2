@@ -15,8 +15,8 @@ def nBayesClassifier(traindata, trainlabel, testdata, testlabel, threshold):
 			for j in traindata[i]:
 				wordham[j[0]] += 1
 	
-	probspam = [i / 450 for i in wordspam]
-	probham = [i / 2250 for i in wordham]
+	probspam = [i / 400 for i in wordspam]
+	probham = [i / 2000 for i in wordham]
 	
 	
 	#print(wordspam, wordham)
@@ -54,40 +54,44 @@ def nBayesClassifier(traindata, trainlabel, testdata, testlabel, threshold):
 			ypred.append(0)
 	#print(nn2p, np2p)
 	SP = np2p / (np2p + nn2p) 
-	SR = np2p / 50
+	SR = np2p / 100
 	F = SP * SR * 2 / (SP + SR)
 	return ypred, SP, SR, F
 
 sn, hn, M = tdm()
 
-traindata = []
-trainlabel = []
-testdata = []
-testlabel = []
-u = set(range(M))
-
 x = list(range(500))
 random.shuffle(x)
-for i in range(450):
-	traindata.append(sn[x[i]])
-	trainlabel.append(1)
-for i in range(50):
-	tmpz = set([z[0] for z in sn[x[i + 450]]])
-	testdata.append([tmpz, u - tmpz])
-	testlabel.append(1)
+y = list(range(2500))
+random.shuffle(y)
 
-x = list(range(2551))
-random.shuffle(x)
-for i in range(2250):
-	traindata.append(hn[x[i]])
-	trainlabel.append(0)
-for i in range(250):
-	tmpz = set([z[0] for z in hn[x[i + 2250]]])
-	testdata.append([tmpz, u - tmpz])
-	testlabel.append(0)
+# 5 cross validation
 
-z = 0.0
-for i in range(10):
-	z += nBayesClassifier(traindata, trainlabel, testdata, testlabel, 0.35)[3]
-print(z/10)
+for idx in range(5):
+
+	traindata = []
+	trainlabel = []
+	testdata = []
+	testlabel = []
+	u = set(range(M))
+	for i in range(400):
+		traindata.append(sn[x[i]])
+		trainlabel.append(1)
+	for i in range(100):
+		tmpz = set([z[0] for z in sn[x[i + 400]]])
+		testdata.append([tmpz, u - tmpz])
+		testlabel.append(1)
+
+	
+	for i in range(2000):
+		traindata.append(hn[y[i]])
+		trainlabel.append(0)
+	for i in range(500):
+		tmpz = set([z[0] for z in hn[y[i + 2000]]])
+		testdata.append([tmpz, u - tmpz])
+		testlabel.append(0)
+
+	print(nBayesClassifier(traindata, trainlabel, testdata, testlabel,0.5)[3])
+	x =  x[100:] + x[:100]
+	y =  y[500:] + y[:500]
 
